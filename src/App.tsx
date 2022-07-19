@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -7,7 +6,37 @@ import Register from './pages/register/Register';
 import Reset from './pages/reset/Reset';
 import Signin from './pages/signin/Signin';
 
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, logout, selectUser } from './redux/slices/userSlice';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from 'services/firebase';
+
 function App() {
+
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (userAuth) => {
+      if (userAuth) {
+        console.log('userAuth', userAuth)
+        // user is logged in, send the user's details to redux, store the current user in the state
+        dispatch(
+          login({
+            email: userAuth.email,
+            uid: userAuth.uid,
+            displayName: userAuth.displayName,
+            photoUrl: userAuth.photoURL,
+          })
+        );
+      } else {
+        dispatch(logout());
+      }
+    });
+
+    console.log('user', user);
+  }, []);
 
   return (
     <div className="App">
