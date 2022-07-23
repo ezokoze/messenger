@@ -1,32 +1,50 @@
 
-import { GroupModal } from 'components';
+import { Conversation, GroupModal } from 'components';
 import { GroupContext } from 'context/groupContext';
-import { useContext, useState } from 'react';
-import { saveGroup } from 'services/group';
+import { onSnapshot } from "firebase/firestore";
+import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setConversation } from 'redux/slices/conversationSlice';
+import { selectUser } from 'redux/slices/userSlice';
+import { fetchGroupsByUserId, saveGroup } from 'services/group';
+import SidenavHeader from './header/SidenavHeader';
 import './Sidenav.css';
 
 export default function Sidenav(props: any) {
 
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
+
+
     const { theme } = useContext(GroupContext);
 
     const [open, setOpen] = useState(false);
+    const [conversations, setConversations] = useState([]);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    console.log('userId', theme)
-
-    const conversations = [{
-        id: 1,
-        recipient: 'John Doe',
-        message: 'Salut tu vas bien ?'
-    }, {
-        id: 2,
-        recipient: 'Patricia James',
-        message: 'Salut, comment vas-tu ? Joyeux anniversaire !!'
-    }];
+    useEffect(() => {
+        if (user) {
+            fetchGroupsByUserId(user.uid).then((groupQuery) => {
+                if (groupQuery) {
+                    onSnapshot(groupQuery, (snapshot) => {
+                        const allConversations = [] as any;
+                        snapshot.forEach((doc) => {
+                            const data = doc.data();
+                            allConversations.push(data);
+                        });
+                        setConversations(allConversations);
+                    });
+                }
+            });
+        }
+    }, [user]);
 
     const conversationOpened = (conversationId: number) => {
-        props.onConversationOpened(conversationId);
+        const currentConv = conversations.find((conversation: any) => conversation.id === conversationId);
+        dispatch(
+            setConversation(currentConv)
+        );
     }
 
     const createConversation = () => {
@@ -34,20 +52,25 @@ export default function Sidenav(props: any) {
     }
 
     const onGroupModalClosed = (userIds: any) => {
-        // saveGroup([userId, ...userIds], userId, 'Premiere conv', 1);
+        saveGroup([user.uid, ...userIds], user.uid, 'troisième conv', 1);
         handleClose();
     };
 
     return (
         <div className='sidenav'>
+            <div className="header">
+                <SidenavHeader />
+            </div>
             <div className="conversations">
-                {/* {group.map((group: any, index: number) => (
+                {conversations.map((conversation: any, index: number) => (
                     <Conversation key={index}
-                        conversationId={group.id}
-                        name={group.name}
-                        message={group?.recentMessage}
+                        conversationId={conversation.id}
+                        name={conversation.name}
+                        members={conversation.members}
+                        recentMessage={conversation.recentMessage}
+                        currentUserId={user.uid}
                         conversationClicked={(conversationId: number) => conversationOpened(conversationId)} />
-                ))} */}
+                ))}
             </div>
 
             <div className="create-conversation">

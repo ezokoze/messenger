@@ -22,6 +22,19 @@ const getUsers = async (userId: string) => {
     }
 }
 
+const getUserNameByUserId = async (userId: string) => {
+    try {
+        const q = query(collection(db, "users"), where("uid", "==", userId));
+        const docs = await getDocs(q);
+        const user = docs.docs[0].data();
+        return user.displayName;
+    } catch (err: any) {
+        console.error('err', err);
+        alert(`error while getUserNameByUserId ${err.message}`);
+    }
+}
+
 export {
-    getUsers
+    getUsers,
+    getUserNameByUserId
 };

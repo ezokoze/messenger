@@ -6,11 +6,11 @@ import Register from './pages/register/Register';
 import Reset from './pages/reset/Reset';
 import Signin from './pages/signin/Signin';
 
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, logout, selectUser } from './redux/slices/userSlice';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { auth } from 'services/firebase';
+import { login, logout, selectUser } from './redux/slices/userSlice';
 
 function App() {
 
@@ -20,7 +20,6 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (userAuth) => {
       if (userAuth) {
-        console.log('userAuth', userAuth)
         // user is logged in, send the user's details to redux, store the current user in the state
         dispatch(
           login({
@@ -34,8 +33,6 @@ function App() {
         dispatch(logout());
       }
     });
-
-    console.log('user', user);
   }, []);
 
   return (

@@ -1,6 +1,6 @@
 .sidenav {
     /* background-color: red; */
-    width: 30%;
+    width: 40%;
     height: 100vh;
-    border-right: 1px solid black;
+    border-right: 1px solid rgba(0, 0, 0, 0.035);
 }

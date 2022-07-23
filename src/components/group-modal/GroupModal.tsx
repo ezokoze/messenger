@@ -7,6 +7,8 @@ import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectUser } from 'redux/slices/userSlice'
 import { getUsers } from 'services/user'
 import './GroupModal.css'
 
@@ -26,10 +28,15 @@ function GroupModal(props: any) {
     const [users, setUsers] = useState([] as any);
     const [selectedUsers, setSelectedUsers] = useState([] as any);
 
+    const currentUser = useSelector(selectUser);
+
     useEffect(() => {
-        getUsers('5ZcOKOBg2Rbb7qiFvFR8TobWSYp2').then(users => {
-            setUsers(users);
-        });
+        // get all users excluding current user
+        if (currentUser) {
+            getUsers(currentUser.uid).then(users => {
+                setUsers(users);
+            });
+        }
     }, []);
 
     return (
@@ -54,7 +61,7 @@ function GroupModal(props: any) {
                         limitTags={2}
                         id="multiple-limit-tags"
                         options={users}
-                        getOptionLabel={(option: any) => option.name}
+                        getOptionLabel={(option: any) => option.displayName}
                         onChange={(event: any, value: any) => {
                             setSelectedUsers(value.map((users: any) => users.uid));
                         }}

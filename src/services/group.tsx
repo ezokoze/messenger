@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, query, where } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { db } from "./firebase";
 
 const saveGroup = async (userArray: any, createdBy: any, name: any, type: any) => {
@@ -8,13 +8,18 @@ const saveGroup = async (userArray: any, createdBy: any, name: any, type: any) =
         createdBy,
         members: userArray,
         name,
-        type
-    } as any;
+        type,
+        id: ''
+    };
 
     try {
         const groupRef = collection(db, 'group');
-        const snapshot = await addDoc(groupRef, group);
+        const snapshot = await addDoc(groupRef, group)
+
+        // update id
         group.id = snapshot.id;
+        updateDoc(snapshot, { ...group });
+
         return group;
     } catch (err: any) {
         console.error('err', err);
