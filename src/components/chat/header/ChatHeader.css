@@ -1,0 +1,27 @@
+.chat-header-container {
+    background: red;
+    display: flex;
+    height: 80px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px 0px 0px;
+}
+
+.chat-header-title {
+    font-size: 20px;
+    font-weight: 400;
+    color: #34495e;
+    margin-left: 10px;
+}
+
+.chat-header-members {
+   display: flex; 
+}
+
+.chat-header-member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #aaa;
+    display: block;
+}
