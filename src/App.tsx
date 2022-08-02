@@ -11,24 +11,33 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from 'services/firebase';
 import { login, logout, selectUser } from './redux/slices/userSlice';
+import { getUser } from 'services/user';
+import { onSnapshot } from 'firebase/firestore';
 
 function App() {
 
-  const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (userAuth) => {
+    onAuthStateChanged(auth, async (userAuth) => {
       if (userAuth) {
-        // user is logged in, send the user's details to redux, store the current user in the state
-        dispatch(
-          login({
-            email: userAuth.email,
-            uid: userAuth.uid,
-            displayName: userAuth.displayName,
-            photoUrl: userAuth.photoURL,
-          })
-        );
+        getUser(userAuth.uid).then((query) => {
+          if (query) {
+            onSnapshot(query, async (snapshot) => {
+              snapshot.forEach((user: any) => {
+                const userDatas = user.data();
+                dispatch(
+                  login({
+                    email: userDatas.email,
+                    uid: userDatas.uid,
+                    displayName: userDatas.displayName,
+                    photoUrl: userDatas.photoURL,
+                  })
+                );
+              });
+            });
+          }
+        });
       } else {
         dispatch(logout());
       }

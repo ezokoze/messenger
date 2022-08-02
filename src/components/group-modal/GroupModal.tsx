@@ -37,7 +37,7 @@ function GroupModal(props: any) {
                 setUsers(users);
             });
         }
-    }, []);
+    }, [currentUser]);
 
     return (
         <Modal

@@ -1,0 +1,57 @@
+.chat-footer-container {
+  /* position: absolute; */
+  display: flex;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* background-color: green; */
+}
+
+.chat-footer-input {
+  background-color: #f0f2f5;
+  border-radius: 30px;
+  height: 40px;
+  padding: 20px;
+}
+
+.chat-footer-input input {
+  line-height: 40px;
+}
+
+.giphy-popup {
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* width */
+.giphy-grid::-webkit-scrollbar {
+  width: 18px;
+}
+
+/* Handle */
+.giphy-grid::-webkit-scrollbar-thumb {
+  background: #ced0d4;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
+}
+
+.giphy-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: sticky;
+  top: 0px;
+}
+
+.giphy-grid {
+  overflow: overlay;
+  max-height: 350px;
+  width: 300px;
+  max-width: 100%;
+  overflow-x: hidden;
+}

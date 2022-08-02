@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, Firestore, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "./firebase";
 
 const saveGroup = async (userArray: any, createdBy: any, name: any, type: any) => {
@@ -55,7 +55,8 @@ const filterGroup = async (userArray: any) => {
 const fetchGroupsByUserId = async (uid: string) => {
     try {
         const groupRef = await collection(db, 'group');
-        const groupQuery = query(groupRef, where('members', 'array-contains', uid));
+        const groupQuery = query(groupRef, where('members', 'array-contains', uid), orderBy('recentMessage.sentAt', 'desc'));
+        // where('members', 'array-contains'
         return groupQuery;
     } catch (err: any) {
         console.error(err);
@@ -63,8 +64,24 @@ const fetchGroupsByUserId = async (uid: string) => {
     }
 }
 
+const markConversationAsRead = async (conversationId: string) => {
+    try {
+        const q = query(collection(db, "group"), where("id", "==", conversationId));
+        const docs = await getDocs(q);
+
+        docs.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            setDoc(doc.ref, { recentMessage: { readen: true } }, { merge: true });
+        });
+    } catch (err: any) {
+        console.error('err', err);
+        alert(`error while getUserNameByUserId ${err.message}`);
+    }
+};
+
 export {
     saveGroup,
     filterGroup,
-    fetchGroupsByUserId
+    fetchGroupsByUserId,
+    markConversationAsRead
 };

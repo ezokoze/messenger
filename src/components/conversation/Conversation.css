@@ -1,21 +1,19 @@
 .conversation-container {
-    width: 100%;
-    height: 100px;
+    max-width: 360px;
+    height: 100%;
+    padding: 10px;
+    cursor: pointer;
 }
 
 .conversation-avatar {
-    margin: 10px;
-    min-width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #aaa;
+    margin: 0 10px;
     display: block;
 }
 
 .conversation-name {
-    font-size: 18px;
-    font-weight: 400;
-    color:#34495e;
+    font-weight: 500;
+    font-size: 15px;
+    color:#050505;
 }
 
 .conversation-message {
@@ -24,11 +22,21 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-size: 14px;
-    color:#8e8e8e;
+    font-size: 13px;
+    color:#65676B;
 }
 
 .conversation-time {
-    font-size: 14px;
-    color: #bdc3c7;
+    line-height: 13px;
+    font-size: 12px;
+    color: #65676B;
+}
+
+.unseen {
+    color: #050505;
+    font-weight: 700;
+}
+
+.active-conversation {
+    background: rgba(0, 0, 0, 0.04);
 }

@@ -1,6 +1,7 @@
 .message-container {
     display: flex;
-    padding: 10px;
+    padding: 2px 0px;
+    margin-right: 20px;
     justify-content: flex-start;
 }
 
@@ -9,8 +10,9 @@
 }
 
 .message {
+    font-size: 15px;
     background-color: #ecf0f1;
-    padding: 5px 12px;
+    padding: 8px 12px;
     border-radius: 20px;
     display: flex;
     justify-content: flex-start;
@@ -19,15 +21,15 @@
 
 .sent-by-me .message {
     color: white;
-    background-color: #3498db;
+    background-color: #0084ff;
 }
 
 .message-user-avatar {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #aaa;
     display: block;
-    margin-right: 5px;
+    margin-left: 8px;
+    margin-right: 10px;
 }
 
+.message-media {
+    border-radius: 10px;
+}

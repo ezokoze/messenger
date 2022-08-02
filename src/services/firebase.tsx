@@ -16,11 +16,14 @@ import {
     getFirestore, query,
     where
 } from 'firebase/firestore';
-import { login } from '../redux/slices/userSlice';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
+import { updateUser } from './user';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -84,6 +87,34 @@ const logout = () => {
     signOut(auth);
 };
 
+// upload file
+
+const uploadProfilePicture = async (userId: string, file: any) => {
+    const fileExtension = file.name.split('.').pop();
+    const storageRef = ref(storage, `/profile-picture/${userId}/${uuidv4()}.${fileExtension}`)
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+            const percent = Math.round(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+
+            // update progress
+            // setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+            // download url
+            getDownloadURL(uploadTask.snapshot.ref).then((url: string) => {
+                updateUser(userId, { 'photoURL': url })
+            });
+        }
+    );
+    // return '';
+}
+
 export {
     app,
     auth,
@@ -92,6 +123,7 @@ export {
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
     sendPasswordReset,
-    logout
+    logout,
+    uploadProfilePicture
 };
 

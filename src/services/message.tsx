@@ -1,12 +1,14 @@
 import { addDoc, collection, doc, orderBy, query, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
-const saveMessage = async (userId: any, messageText: string, sentAt: Date, currentGroupId: any) => {
-    if (messageText.trim()) {
+const saveMessage = async (userId: any, sentAt: Date, currentGroupId: any, messageText: string, mediaUrl: string) => {
+
+    if (messageText.trim() || mediaUrl.trim()) {
         const message = {
             messageText,
             sentAt,
             sentBy: userId,
+            mediaUrl: mediaUrl
         }
 
         try {

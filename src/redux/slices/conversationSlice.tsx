@@ -3,19 +3,27 @@ import { createSlice } from "@reduxjs/toolkit";
 export const ConversationSlice = createSlice({
     name: 'conversation',
     initialState: {
-        conversation: null
+        currentConversation: null,
+        currentRecipient: null
     },
     reducers: {
-        setConversation: (state, action) => {
-            state.conversation = action.payload;
+        setCurrentConversation: (state, action) => {
+            state.currentConversation = action.payload;
+        },
+        setCurrentRecipient: (state, action) => {
+            state.currentRecipient = action.payload;
         }
     }
 });
 
-export const { setConversation } = ConversationSlice.actions;
+export const { setCurrentConversation } = ConversationSlice.actions;
+export const { setCurrentRecipient } = ConversationSlice.actions;
 
 // selectors
-export const selectedConversation = (state: any) => state.conversation.conversation;
+export const selectedConversation = (state: any) => state.conversation.currentConversation;
+
+export const selectedConversationRecipient = (state: any) => state.conversation.currentRecipient;
+
 // export const selectedConversationName = (state: any) => state.conversation.conversationId;
 // export const selectedConversationMembers = (state: any) => state.conversation.conversationId;
 

@@ -1,6 +1,20 @@
 .header-container {
-    display: flex;
+    /* display: flex; */
     align-items: center;
-    height: 80px;
-    background-color: lightblue;
+    width: 360px;
+    /* height: 120px; */
+    /* background-color: lightblue; */
+}
+
+.header-first-row  {
+    height: 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+}
+
+.header-search {
+    padding: 6px 16px 12px;
+    /* padding: 0 10px; */
 }

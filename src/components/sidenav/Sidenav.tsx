@@ -1,49 +1,67 @@
 
 import { Conversation, GroupModal } from 'components';
-import { GroupContext } from 'context/groupContext';
-import { onSnapshot } from "firebase/firestore";
-import { useContext, useEffect, useState } from 'react';
+import { onSnapshot } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setConversation } from 'redux/slices/conversationSlice';
+import { selectedConversation, setCurrentConversation, setCurrentRecipient } from 'redux/slices/conversationSlice';
 import { selectUser } from 'redux/slices/userSlice';
-import { fetchGroupsByUserId, saveGroup } from 'services/group';
+import { fetchGroupsByUserId, markConversationAsRead, saveGroup } from 'services/group';
+import { getUserNameByUserId } from 'services/user';
 import SidenavHeader from './header/SidenavHeader';
 import './Sidenav.css';
 
 export default function Sidenav(props: any) {
 
-    const user = useSelector(selectUser);
     const dispatch = useDispatch();
 
-
-    const { theme } = useContext(GroupContext);
+    const currentUser = useSelector(selectUser);
+    const currentConversation = useSelector(selectedConversation);
 
     const [open, setOpen] = useState(false);
-    const [conversations, setConversations] = useState([]);
+    const [conversations, setConversations] = useState([] as any);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
-        if (user) {
-            fetchGroupsByUserId(user.uid).then((groupQuery) => {
+        if (currentUser) {
+            fetchGroupsByUserId(currentUser.uid).then((groupQuery) => {
                 if (groupQuery) {
-                    onSnapshot(groupQuery, (snapshot) => {
+                    onSnapshot(groupQuery, async (snapshot) => {
                         const allConversations = [] as any;
                         snapshot.forEach((doc) => {
-                            const data = doc.data();
-                            allConversations.push(data);
+                            allConversations.push(doc.data());
                         });
                         setConversations(allConversations);
                     });
                 }
             });
         }
-    }, [user]);
+    }, [currentUser]);
 
-    const conversationOpened = (conversationId: number) => {
+    useEffect(() => {
+        // open first conv by default
+        if (!currentConversation && conversations.length > 0) {
+            openConversation(conversations[0].id);
+        }
+    }, [conversations]);
+
+    useEffect(() => {
+        if (currentConversation) {
+            const memberWithoutCurrentUser = currentConversation.members.filter((x: any) => x !== currentUser.uid);
+            getUserNameByUserId(memberWithoutCurrentUser[0]).then((userInfos: any) => {
+                dispatch(
+                    setCurrentRecipient(userInfos)
+                );
+            });
+        }
+    }, [currentConversation]);
+
+    const openConversation = (conversationId: string) => {
         const currentConv = conversations.find((conversation: any) => conversation.id === conversationId);
+        markConversationAsRead(conversationId);
         dispatch(
-            setConversation(currentConv)
+            setCurrentConversation(currentConv)
         );
     }
 
@@ -52,29 +70,41 @@ export default function Sidenav(props: any) {
     }
 
     const onGroupModalClosed = (userIds: any) => {
-        saveGroup([user.uid, ...userIds], user.uid, 'troisième conv', 1);
+        saveGroup([currentUser.uid, ...userIds], currentUser.uid, '', 1);
         handleClose();
     };
+
+    const getConversationName = async (members: any) => {
+        let result = '';
+        if (members.length === 2) {
+            const memberWithoutCurrentUser = members.filter((x: any) => x !== currentUser.uid);
+            await getUserNameByUserId(memberWithoutCurrentUser[0]).then((userInfos: any) => {
+                result = userInfos.displayName;
+            });
+        }
+        return result;
+    }
 
     return (
         <div className='sidenav'>
             <div className="header">
-                <SidenavHeader />
+                <SidenavHeader onCreateConversationClicked={createConversation} />
             </div>
             <div className="conversations">
-                {conversations.map((conversation: any, index: number) => (
+                {conversations && conversations.map((conversation: any, index: number) => (
                     <Conversation key={index}
                         conversationId={conversation.id}
-                        name={conversation.name}
                         members={conversation.members}
                         recentMessage={conversation.recentMessage}
-                        currentUserId={user.uid}
-                        conversationClicked={(conversationId: number) => conversationOpened(conversationId)} />
+                        currentUserId={currentUser.uid}
+                        currentlyOpen={currentConversation?.id === conversation.id}
+                        readen={conversation.recentMessage.readen || conversation.recentMessage.sentBy === currentUser.uid}
+                        conversationClicked={(conversationId: string) => openConversation(conversationId)} />
                 ))}
             </div>
 
             <div className="create-conversation">
-                <button onClick={createConversation}>add conv</button>
+                {/* <button onClick={createConversation}>add conv</button> */}
                 <GroupModal open={open} onClose={handleClose} onValidated={(userIds: any) => onGroupModalClosed(userIds)} />
             </div>
         </div>

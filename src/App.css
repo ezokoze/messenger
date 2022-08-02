@@ -1,6 +1,6 @@
 .layout { 
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     min-height: 100vh;
 }

@@ -5,5 +5,8 @@ min-height: 100vh;
 }
 
 .messages {
+    overflow: auto;
     width: 100%;
+    max-height: calc(100vh - 72px - 60px);
+    flex-grow: 1;
 }
