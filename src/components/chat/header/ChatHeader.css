@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     padding: 10px 12px;
-    box-shadow: rgb(149 157 165 / 20%) 0px 4px 10px 0px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
 }
 

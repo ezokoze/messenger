@@ -1,0 +1,35 @@
+.settings-popup-fields {
+    height: 360px;
+    width: 300px;
+}
+
+.settings-popup-picture-field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settings-popup-name-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-popup-metamask-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-label {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 20px 0px 5px 0px;
+}
+
+.settings-popup-picture-container {
+    padding: 10px;
+}
+
+/* fix for input with outlined and no label / conflict with bootstrap */
+fieldset legend{
+        width: unset;
+}

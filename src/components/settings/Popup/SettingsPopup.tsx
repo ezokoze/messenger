@@ -6,10 +6,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import MetamaskIcon from 'components/shared/metamask-icon/metamask-icon';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/slices/userSlice';
 import { uploadProfilePicture } from 'services/firebase';
+import SettingsIcon from '@mui/icons-material/Settings';
+
+import './SettingsPopup.css';
 
 function SettingsPopup(props: any) {
 
@@ -69,40 +73,48 @@ function SettingsPopup(props: any) {
                 Open form dialog
             </Button> */}
             <Dialog open={props.isOpen} onClose={props.onSettingsPopupClose}>
-                <DialogTitle>Profile</DialogTitle>
+                <DialogTitle>Settings</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                    />
+                    <div className="settings-popup-fields">
+                        <div className="settings-popup-picture-field">
+                            <input
+                                accept="image/*"
+                                id="contained-button-file"
+                                multiple
+                                type="file"
+                                hidden
+                                onChange={(e) => handleUploadClick(e)}
+                            />
+                            <label className="settings-popup-picture-container" htmlFor="contained-button-file">
+                                <Fab sx={{
+                                    height: '128px',
+                                    width: '128px',
+                                    backgroundImage: `url(${currentUser?.photoUrl})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat',
+                                    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;'
+                                }} component="span" >
+                                </Fab>
+                            </label>
+                        </div>
 
-                    <input
-                        accept="image/*"
-                        id="contained-button-file"
-                        multiple
-                        type="file"
-                        onChange={(e) => handleUploadClick(e)}
-                    />
-                    <label htmlFor="contained-button-file">
-                        <Fab component="span" >
-                            {/* <AddPhotoAlternateIcon /> */}
-                        </Fab>
-                    </label>
-                    {/* <input type='file' onChange={onSelectFile} />
-                    {selectedFile && <img src={preview} />} */}
+                        <div className="settings-popup-name-field">
+                            <div className="field-label">Name</div>
+                            <TextField id="outlined-basic" variant="outlined" value={currentUser?.displayName} />
+                        </div>
+
+                        <div className="settings-popup-metamask-field">
+                            <div className="field-label">Metamask</div>
+                            <Button sx={{ height: '56px' }} variant="outlined" startIcon={<MetamaskIcon />}>
+                                Connect metamask
+                            </Button>
+                        </div>
+                    </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onSettingsPopupClose}>Cancel</Button>
-                    <Button onClick={props.onSettingsPopupClose}>Subscribe</Button>
+                    <Button onClick={props.onSettingsPopupClose}>Save</Button>
                 </DialogActions>
             </Dialog>
         </div>

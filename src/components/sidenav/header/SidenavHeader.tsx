@@ -1,17 +1,35 @@
+import { ContentCut } from '@mui/icons-material';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import SearchIcon from '@mui/icons-material/Search';
-import { Avatar, Box, IconButton, InputBase, Menu, MenuItem, styled, Tooltip, Typography } from '@mui/material';
+import { Avatar, Box, IconButton, InputBase, ListItemIcon, Menu, MenuItem, styled, Tooltip, Typography } from '@mui/material';
 import SettingsPopup from 'components/settings/Popup/SettingsPopup';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/slices/userSlice';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import SettingsIcon from '@mui/icons-material/Settings';
 import './SidenavHeader.css';
 
 function SidenavHeader(props: any) {
 
     const currentUser = useSelector(selectUser);
 
-    const settings = ['Profile', 'Logout'];
+    const settings = [{
+        title: 'Add friends',
+        icon: <PersonAddIcon fontSize="small" />,
+        action: 'friends'
+    },
+    {
+        title: 'Profile',
+        icon: <SettingsIcon fontSize="small" />,
+        action: 'settings'
+    },
+    {
+        title: 'Logout',
+        icon: <PowerSettingsNewIcon fontSize="small" />,
+        action: 'logout'
+    }];
 
     const [userAvatar, setUserAvatar] = useState('');
 
@@ -82,7 +100,7 @@ function SidenavHeader(props: any) {
 
     const openMenu = (settingName: string) => {
         switch (settingName) {
-            case 'Profile':
+            case 'settings':
                 handleClickOpen();
                 break;
 
@@ -121,9 +139,12 @@ function SidenavHeader(props: any) {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center" onClick={() => openMenu(setting)}>{setting}</Typography>
+                            {settings.map((setting, index) => (
+                                <MenuItem key={index} onClick={handleCloseUserMenu}>
+                                    <ListItemIcon>
+                                        {setting.icon}
+                                    </ListItemIcon>
+                                    <Typography textAlign="center" onClick={() => openMenu(setting.action)}>{setting.title}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>

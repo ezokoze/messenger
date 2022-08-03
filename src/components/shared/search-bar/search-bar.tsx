@@ -1,12 +1,10 @@
+import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { styled } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
 import debounce from '@mui/material/utils/debounce';
-import React, { useMemo, useState } from 'react'
+import { useMemo } from 'react';
 
 function SharedSearchBar(props: any) {
-
-    const [searchTerm, setSearchTerm] = useState('trending');
 
     const Search = styled('div')(({ theme }) => ({
         position: 'relative',
@@ -39,7 +37,6 @@ function SharedSearchBar(props: any) {
     }));
 
     const changeHandler = (event: any) => {
-        setSearchTerm(event.target.value);
         props.onChange(event.target.value);
     };
 
