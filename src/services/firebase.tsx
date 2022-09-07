@@ -141,8 +141,6 @@ const signinMetamask = async (address: string) => {
         throw new Error("Invalid JWT");
     }
 
-    console.log('customToken', customToken);
-
     const res = await signInWithCustomToken(auth, customToken);
 }
 

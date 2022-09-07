@@ -28,7 +28,7 @@ function Chat(props: any) {
                     snapshot.forEach(document => {
                         allMessages.push(document.data())
                     });
-                    setMessages(allMessages);
+                    setMessages(allMessages.reverse());
                 });
             }) as any;
             return () => unsubscribe();
