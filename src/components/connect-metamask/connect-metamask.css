@@ -1,0 +1,23 @@
+.connect-wallet {
+  cursor: pointer;
+
+  border: solid 3px transparent;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, #ff48fa, #9444ff);
+  background-origin: border-box;
+  box-shadow: 2px 1000px 1px #fff inset;
+
+  width: 250px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 50px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+}
+
+.connect-wallet-loading {
+  cursor: none;
+}

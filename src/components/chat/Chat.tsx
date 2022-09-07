@@ -24,7 +24,7 @@ function Chat(props: any) {
         if (currentConversation) {
             getMessageByConversationId(currentConversation.id).then((documentRef) => {
                 unsubscribe = onSnapshot(documentRef, (snapshot) => {
-                    const allMessages = [] as any;
+                    let allMessages = [] as any;
                     snapshot.forEach(document => {
                         allMessages.push(document.data())
                     });
@@ -36,7 +36,9 @@ function Chat(props: any) {
     }, [currentConversation]);
 
     useEffect(() => {
-        scrollToBottom();
+        setTimeout(() => {
+            scrollToBottom();
+        }, 600);
     }, [messages]);
 
     const save = (message: string) => {
@@ -44,7 +46,7 @@ function Chat(props: any) {
     };
 
     const scrollToBottom = () => {
-        messagesEnd.scrollIntoView({ behavior: "smooth" });
+        // messagesEnd.scrollIntoView({ behavior: "smooth" });
     }
 
     return (

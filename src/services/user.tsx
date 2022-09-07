@@ -1,6 +1,4 @@
-import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from "firebase/firestore";
-import { useDispatch } from "react-redux";
-import { login } from "redux/slices/userSlice";
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { db } from "./firebase";
 
 
@@ -61,10 +59,26 @@ const updateUser = async (userId: string, data: any) => {
     }
 };
 
+const createUserIfNotExisting = async (userId: string) => {
+    const usersRef = collection(db, "users");
+    const document = doc(usersRef, userId);
+    const documentSnap = await getDoc(document);
+
+    if (!documentSnap.exists()) {
+        setDoc(doc(usersRef, userId), {
+            uid: userId,
+            displayName: userId,
+            authProvider: "metamask",
+            photoURL: 'https://icon-library.com/images/anonymous-icon/anonymous-icon-0.jpg'
+        });
+    }
+};
+
 export {
     getUser,
     getUsers,
     getUserNameByUserId,
-    updateUser
+    updateUser,
+    createUserIfNotExisting
 };
 

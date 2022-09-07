@@ -2,6 +2,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
 import Fade from '@mui/material/Fade'
 import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
@@ -56,7 +57,7 @@ function GroupModal(props: any) {
                     <Typography id="transition-modal-title" variant="h6" component="h2">
                         Créer une conversation
                     </Typography>
-                    <Autocomplete
+                    {/* <Autocomplete
                         multiple
                         limitTags={2}
                         id="multiple-limit-tags"
@@ -69,7 +70,34 @@ function GroupModal(props: any) {
                             <TextField {...params} label="Utilisateurs" placeholder="Choisissez des utilisateurs" />
                         )}
                         sx={{ width: '100%' }}
+                    /> */}
+
+                    <Autocomplete
+                        multiple
+                        id="tags-filled"
+                        options={users.map((option: any) => option.uid)}
+                        defaultValue={[]}
+                        freeSolo
+                        renderTags={(value: readonly string[], getTagProps) =>
+                            value.map((option: string, index: number) => (
+                                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                            ))
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                variant="filled"
+                                label="freeSolo"
+                                placeholder="Favorites"
+                            />
+                        )}
+                        onChange={(event: any, value: any) => {
+                            console.log('event', event);
+                            console.log('value', value);
+                            setSelectedUsers(value.map((userId: any) => userId));
+                        }}
                     />
+
                     <Button onClick={() => props.onValidated(selectedUsers)}>Créer</Button>
                 </Box>
             </Fade>

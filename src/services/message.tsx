@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, orderBy, query, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, limit, orderBy, query, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 const saveMessage = async (userId: any, sentAt: Date, currentGroupId: any, messageText: string, mediaUrl: string) => {
@@ -36,7 +36,7 @@ const getMessageByConversationId = async (conversationId: string) => {
     const conversationsCollection = await collection(db, `message`);
     const conversationDocument = doc(conversationsCollection, conversationId);
     const messagesCollection = await collection(conversationDocument, 'messages');
-    const queryMessages = query(messagesCollection, orderBy('sentAt'));
+    const queryMessages = query(messagesCollection, limit(10), orderBy('sentAt', 'desc'));
     return queryMessages;
 };
 

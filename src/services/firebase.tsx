@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { firebaseConfig } from 'configs/firebase';
 import { initializeApp } from 'firebase/app';
 import {
@@ -5,6 +6,7 @@ import {
     getAuth,
     GoogleAuthProvider,
     sendPasswordResetEmail,
+    signInWithCustomToken,
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut
@@ -18,6 +20,7 @@ import {
 } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
+import Web3 from 'web3';
 import { updateUser } from './user';
 
 const app = initializeApp(firebaseConfig);
@@ -47,6 +50,7 @@ const signInWithGoogle = async () => {
 }
 
 const logInWithEmailAndPassword = async (email: string, password: string) => {
+    console.log('email', email);
     try {
         await signInWithEmailAndPassword(auth, email, password)
     } catch (err: any) {
@@ -115,6 +119,33 @@ const uploadProfilePicture = async (userId: string, file: any) => {
     // return '';
 }
 
+const signinMetamask = async (address: string) => {
+    const baseUrl = "http://localhost:4000";
+    const response = await axios.get(`${baseUrl}/message?address=${address}`);
+    const messageToSign = response?.data?.messageToSign;
+
+    if (!messageToSign) {
+        throw new Error("Invalid message to sign");
+    }
+
+    const web3 = new Web3(Web3.givenProvider);
+    const signature = await web3.eth.personal.sign(messageToSign, address, '');
+
+    const jwtResponse = await axios.get(
+        `${baseUrl}/jwt?address=${address}&signature=${signature}`
+    );
+
+    const customToken = jwtResponse?.data?.customToken;
+
+    if (!customToken) {
+        throw new Error("Invalid JWT");
+    }
+
+    console.log('customToken', customToken);
+
+    const res = await signInWithCustomToken(auth, customToken);
+}
+
 export {
     app,
     auth,
@@ -124,6 +155,7 @@ export {
     registerWithEmailAndPassword,
     sendPasswordReset,
     logout,
-    uploadProfilePicture
+    uploadProfilePicture,
+    signinMetamask
 };
 

@@ -9,7 +9,13 @@ const saveGroup = async (userArray: any, createdBy: any, name: any, type: any) =
         members: userArray,
         name,
         type,
-        id: ''
+        id: '',
+        recentMessage: {
+            mediaUrl: '',
+            sentAt: new Date(),
+            messageText: '',
+            readen: false
+        }
     };
 
     try {

@@ -1,8 +1,7 @@
 import Avatar from '@mui/material/Avatar';
-import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectUser } from 'redux/slices/userSlice';
 import { selectedConversationRecipient } from 'redux/slices/conversationSlice';
+import { selectUser } from 'redux/slices/userSlice';
 import './Message.css';
 
 function Message(props: any) {

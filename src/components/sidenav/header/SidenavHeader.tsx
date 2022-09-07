@@ -38,6 +38,7 @@ function SidenavHeader(props: any) {
 
     useEffect(() => {
         if (currentUser) {
+            console.log('userAvatar', userAvatar);
             setUserAvatar(currentUser.photoUrl);
         }
     }, [currentUser]);

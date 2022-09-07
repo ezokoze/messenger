@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectedConversation, setCurrentConversation, setCurrentRecipient } from 'redux/slices/conversationSlice';
 import { selectUser } from 'redux/slices/userSlice';
 import { fetchGroupsByUserId, markConversationAsRead, saveGroup } from 'services/group';
-import { getUserNameByUserId } from 'services/user';
+import { createUserIfNotExisting, getUserNameByUserId } from 'services/user';
 import SidenavHeader from './header/SidenavHeader';
 import './Sidenav.css';
 
@@ -40,6 +40,7 @@ export default function Sidenav(props: any) {
     }, [currentUser]);
 
     useEffect(() => {
+        console.log('conversations', conversations);
         // open first conv by default
         if (!currentConversation && conversations.length > 0) {
             openConversation(conversations[0].id);
@@ -70,6 +71,11 @@ export default function Sidenav(props: any) {
     }
 
     const onGroupModalClosed = (userIds: any) => {
+        console.log('userIds', userIds);
+        // check if user(s) exist(s)
+        userIds.forEach((userId: string) => {
+            createUserIfNotExisting(userId);
+        });
         saveGroup([currentUser.uid, ...userIds], currentUser.uid, '', 1);
         handleClose();
     };
