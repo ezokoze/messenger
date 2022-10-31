@@ -35,5 +35,5 @@ Install m3ssenger.xyz with npm
 
 ## Roadmap
 
-- Link each profile with ENS so with can retrieve profile picture, a clear name
+- Link each profile with ENS domains so with can retrieve profile picture, a clear name
 - Send token through conversation
