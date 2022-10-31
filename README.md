@@ -16,6 +16,7 @@ Project is still in development and need this [repository](https://github.com/Dr
 Install m3ssenger.xyz with npm
 
 ```javascript
+  // run the app (go to messenger folder)
   npm install
   npm start
 
@@ -24,16 +25,6 @@ Install m3ssenger.xyz with npm
   node index.js
 ```
     
-## Usage/Examples
-
-```javascript
-import Component from 'my-project'
-
-function App() {
-  return <Component />
-}
-```
-
 
 ## Features
 
