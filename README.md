@@ -1,5 +1,5 @@
 
-# m3ssenger.xyz
+# m3ssenger.xyz (soon available on goerli network)
 
 Simple messaging app to discuss with any ERC20 address.
 Anybody can interact with anybody as long as they have an address.
